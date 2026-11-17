@@ -1,18 +1,31 @@
-name: Build Remittance Microservice Docker Image
+name: Manual Release Pipeline (With Change Request)
 
 on:
-  push:
-    branches: [ "main" ]
+  workflow_dispatch:
+    inputs:
+      change_request_id:
+        description: 'ServiceNow Change Request ID (e.g., CHG004512)'
+        required: true
+        default: 'CHG004512'
+      image_tag:
+        description: 'Docker Image Version Tag (e.g., v1.1)'
+        required: true
+        default: 'v1.1'
 
 jobs:
-  build-docker-image:
+  build-and-govern-release:
     runs-on: ubuntu-latest
     steps:
+      - name: Log Change Management Audit Details
+        run: |
+          echo "✅ Approved Change Request: ${{ github.event.inputs.change_request_id }}"
+          echo "🚀 Building Release Version: ${{ github.event.inputs.image_tag }}"
+
       - name: Checkout code from GitHub
         uses: actions/checkout@v4
 
-      - name: Build Docker Image from Dockerfile
-        run: docker build -t remittance-api:v1 .
+      - name: Build Versioned Docker Image
+        run: docker build -t remittance-api:${{ github.event.inputs.image_tag }} .
 
-      - name: Verify Docker Image was created
+      - name: Verify Release Artifact
         run: docker images

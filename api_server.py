@@ -30,17 +30,21 @@ def convert_usd (usd: int):
 @app.post("/transfer")
 def process_transfer(request: TransferRequest):
     if request.pin != 1234:
-     return {"status": "FAILED", "reason": "Invalid PIN"}
-    fee = 100  
-    net_inr = request.usd_amount * 84 - fee
-    cursor.execute("INSERT INTO transfers VALUES (?, ?, ?)", (request.sender, request.usd_amount, net_inr))
-    conn.commit()
-    return {"status": "SUCCESS", "sender": request.sender, "inr_payout": net_inr}
+        return {"status": "FAILED", "reason": "Invalid PIN"}
+    if request.usd_amount > 5000:
+        return {"status": "HOLD_FOR_AML_REVIEW", "reason": "Amount exceeds $5,000 automated limit"}
+        fee = 100  
+        net_inr = request.usd_amount * 84 - fee
+        cursor.execute("INSERT INTO transfers VALUES (?, ?, ?)", (request.sender, request.usd_amount, net_inr))
+        conn.commit()
+        return {"status": "SUCCESS", "sender": request.sender, "inr_payout": net_inr}
 @app.get("/history")
 def get_history():
-    cursor.execute("SELECT * FROM transfers")
-    rows = cursor.fetchall()
-    return {"transactions": rows}
+        cursor.execute("SELECT * FROM transfers")
+        rows = cursor.fetchall()
+        return {"transactions": rows}
+
+
   #once you save the above code, you should run
   #uvicorn api_server:app --reload in below terminal
   #Now Test Your POST /transfer Endpoint in Chrome http://localhost:8000/docs
@@ -48,10 +52,6 @@ def get_history():
   #Click try it out in the json {"sender": "Pravin","usd_amount": 100,"pin": 9999}
   #Try the same json with currect PIN 1234
   #you will see Server responses
-    # Thats it....
-  #Next chapter is  Why Do We Need a Database? Adding a Real Database (SQLite)
-  #Best Part: Python already comes with sqlite3 
-  # built-in (zero installation needed!), 
-  # and it stores your entire SQL database inside
-  # one clean file (remittance.db) right inside your October 2026 folder!
+   
+ 
 
