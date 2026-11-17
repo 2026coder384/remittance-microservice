@@ -1,0 +1,55 @@
+Lesson 6 — Building Your Own Backend API (FastAPI)
+Since your goal is to become a Backend / Cloud / AI Engineer (and understand how AWS Fargate microservices actually receive requests from a mobile app), let's build your very first local REST API server!
+• English: Until now, your code only ran inside a notebook cell. 
+BUT With FastAPI, your Python function becomes a real web server with a URL (like http://127.0.0) that any frontend app can call over HTTP!
+FastAPI is a modern, high-performance Python web framework specifically designed for building Application Programming Interfaces (APIs)
+• ಕನ್ನಡ: ಇಲ್ಲಿಯವರೆಗೆ ನಿಮ್ಮ ಕೋಡ್ ಕೇವಲ ನೋಟ್‌ಬುಕ್ ಒಳಗೆ ಮಾತ್ರ ರನ್ ಆಗುತ್ತಿತ್ತು. FastAPI ಬಳಸಿದಾಗ, ನಿಮ್ಮ ಪೈಥಾನ್ ಕೋಡ್ ಒಂದು ನಿಜವಾದ ಬ್ಯಾಕ್‌ಎಂಡ್ ಸರ್ವರ್ (Backend Server) ಆಗಿ ಬದಲಾಗುತ್ತದೆ ಮತ್ತು ಮೊಬೈಲ್ ಆಪ್‌ಗಳು ಕರೆಯಬಹುದಾದ URL ವಿಳಾಸವನ್ನು ಪಡೆಯುತ್ತದೆ!
+
+Step 2: Your First Independent Coding Challenge (No Solution Given!)
+Create a brand-new regular Python file (not a notebook!) named api_server.py inside your October 2026 folder. See left I have created. 
+
+Your Engineering Ticket (ನೀವು ಬರೆಯಬೇಕಾದ ಪ್ರೋಗ್ರಾಮ್):
+Build a tiny backend server with one API endpoint /fee that takes an amount (integer), adds a ₹100 service fee, and returns a Dictionary {} like {"total_payable": 600}.
+
+
+🔑 Your Only Building Blocks (Use these 4 ingredients—arrange them yourself!):
+
+1. Import & Create App:python
+from fastapi import FastAPI
+app = FastAPI()
+
+Route Decorator (Tells Python which URL triggers your function):python
+@app.get("/fee")
+Use code with caution.
+Your Own Function (def): Right underneath @app.get("/fee"), define a function calculate_total(amount: int): that adds 100 to amount and returns a dictionary {} with key "total_payable".
+
+How to Start Your Server (In Terminal):
+
+uvicorn api_server:app --reload
+
+
+Complete Business Scenario (ಪೂರ್ಣ ಸನ್ನಿವೇಶ)
+
+
+1. What is the Mobile App Sending?
+
+• English: A customer uses the mobile app to send money abroad. Instead of putting details in the URL, the app sends a hidden JSON Body via a POST request to /transfer containing three fields:
+	• "sender": Customer's name (text / str)
+	• "usd_amount": Dollars to send (number / int)
+	• "pin": Secret 4-digit PIN (number / int)
+• ಕನ್ನಡ: ಗ್ರಾಹಕರು ಮೊಬೈಲ್ ಆಪ್ ಮೂಲಕ ವಿದೇಶಕ್ಕೆ ಹಣ ಕಳುಹಿಸುತ್ತಿದ್ದಾರೆ. ಈ ಬಾರಿ ವಿವರಗಳನ್ನು URL ನಲ್ಲಿ ತೋರಿಸುವ ಬದಲು, ಆಪ್ ಸುರಕ್ಷಿತವಾದ POST ವಿನಂತಿಯ ಮೂಲಕ /transfer ವಿಳಾಸಕ್ಕೆ ಈ 3 ಮಾಹಿತಿಗಳನ್ನು ಕಳುಹಿಸುತ್ತದೆ: sender (ಹೆಸರು), usd_amount (ಡಾಲರ್ ಮೊತ್ತ), ಮತ್ತು pin (ರಹಸ್ಯ ಪಿನ್).
+When your Python server receives this JSON packet at /transfer, your code must follow 3 exact steps:
+1. Validate the Data Blueprint (BaseModel): Ensure the incoming JSON actually contains a sender (str), usd_amount (int), and pin (int). (Pydantic does this automatically for you!)
+2. Verify the PIN (if / else): Check if request.pin == 1234.
+	• If the PIN is wrong, immediately return {"status": "FAILED", "reason": "Invalid PIN"}.
+3. Calculate & Return Success:
+	• If the PIN is correct, multiply request.usd_amount * 84, subtract a 100 INR service fee, and return {"status": "SUCCESS", "sender": request.sender, "inr_payout": net_inr}.
+
+How to Test Your New POST Endpoint
+
+1. Save api_server.py (Ctrl + S) and make sure uvicorn is running in your terminal.
+2. Open Chrome and visit http://localhost:8000/docs.
+3. You will see a blue bar saying POST /transfer! Click it → click "Try it out" → edit the JSON box with "sender": "Pravin", "usd_amount": 100, "pin": 1234 → click Execute!
+4. Then test again with "pin": 9999 to see your FAILED security check in action!
+Try adding BaseModel, TransferRequest, and @app.post("/transfer") to your api_server.py file without copying any full solution!
+• Paste your new code (or any error message you hit) here so we can review it together like a real tech lead!

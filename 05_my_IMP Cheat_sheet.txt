@@ -1,10 +1,13 @@
-{
- "cells": [],
- "metadata": {
-  "language_info": {
-   "name": "python"
-  }
- },
- "nbformat": 4,
- "nbformat_minor": 5
-}
+
+🧩 Quick Punctuation Cheat Sheet (ಯಾವ ಚಿಹ್ನೆ ಎಲ್ಲಿ?)
+
+Keep this tiny 4-line reference next to you while practicing:
+
+ಚಿಹ್ನೆ (Symbol)	ಹೆಸರು (Name)	ಯಾವಾಗ ಬಳಸಬೇಕು? (When to use it?)
+:Colon	def, if, else, for, while ಸಾಲುಗಳ ಕೊನೆಯಲ್ಲಿ 
+(ಮತ್ತು Dictionary ಒಳಗೆ "key": value).
+=	Single Equals	ಪೆಟ್ಟಿಗೆಯಲ್ಲಿ ಬೆಲೆ ಇಡಲು (total = 0 ಅಥವಾ a = 10).
+==	Double Equals	ಎರಡು ಬೆಲೆಗಳು ಒಂದೇ ಆಗಿವೆಯೇ ಎಂದು ಚೆಕ್ ಮಾಡಲು 
+(if pin == 1234:).
+()	Round Brackets	def, print(), input() ಜೊತೆಗೆ ಮಾತ್ರ.
+

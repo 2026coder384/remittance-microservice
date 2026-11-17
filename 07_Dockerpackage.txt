@@ -1,0 +1,7 @@
+Packaging Your Microservice into Docker!
+Today we take your working Python + FastAPI + SQLite microservice (api_server.py) and package it into a portable Docker Image—the exact same container artifact that GitLab CI builds, stores in JFrog Artifactory, and Spinnaker deploys onto AWS ECS Fargate!
+
+
+Right now, your api_server.py runs on your Windows laptop because you manually installed fastapi, uvicorn, and pydantic. When you deploy this service to AWS ECS Fargate, AWS gives you a blank Linux cloud server with nothing installed. Your job is to create a shipping box recipe (Dockerfile) and a library list (requirements.txt) so Docker can automatically build a self-contained Linux box with Python, your libraries, and your code ready to run anywhere in the world!
+
+• ಈಗ ನಿಮ್ಮ ಕೋಡ್ ನಿಮ್ಮ ಲ್ಯಾಪ್‌ಟಾಪ್‌ನಲ್ಲಿ ಮಾತ್ರ ಕೆಲಸ ಮಾಡುತ್ತಿದೆ. ಇದನ್ನು AWS ECS Fargate ಕ್ಲೌಡ್ ಸರ್ವರ್‌ಗೆ ಕಳುಹಿಸಿದಾಗ, ಅಲ್ಲಿ ಖಾಲಿ ಲಿನಕ್ಸ್ ಸಿಸ್ಟಮ್ ಮಾತ್ರ ಇರುತ್ತದೆ. ಆದ್ದರಿಂದ ನಾವು requirements.txt (ಬೇಕಾದ ಲೈಬ್ರರಿಗಳ ಪಟ್ಟಿ) ಮತ್ತು Dockerfile (ಪ್ಯಾಕಿಂಗ್ ರೆಸಿಪಿ) ಎಂಬ ಎರಡು ಫೈಲ್‌ಗಳನ್ನು ತಯಾರಿಸುತ್ತೇವೆ—ಇವು ಇಡೀ ಸಾಫ್ಟ್‌ವೇರ್ ಅನ್ನು ಒಂದೇ ಬಾಕ್ಸ್‌ನಲ್ಲಿ ಪ್ಯಾಕ್ ಮಾಡುತ್ತವೆ!
