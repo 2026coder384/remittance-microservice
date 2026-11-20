@@ -4,13 +4,13 @@ on:
   workflow_dispatch:
     inputs:
       change_request_id:
-        description: 'ServiceNow Change Request ID (e.g., CHG004512)'
+        description: 'ServiceNow Change Request ID (e.g., CHG004601)'
         required: true
-        default: 'CHG004512'
+        default: 'CHG004601'
       image_tag:
-        description: 'Docker Image Version Tag (e.g., v1.1)'
+        description: 'Docker Image Version Tag (e.g., v1.2-sec)'
         required: true
-        default: 'v1.1'
+        default: 'v1.2-sec'
 
 jobs:
   build-and-govern-release:
@@ -21,7 +21,7 @@ jobs:
           echo "✅ Approved Change Request: ${{ github.event.inputs.change_request_id }}"
           echo "🚀 Building Release Version: ${{ github.event.inputs.image_tag }}"
 
-            - name: Checkout code from GitHub
+      - name: Checkout code from GitHub
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
@@ -30,3 +30,9 @@ jobs:
         uses: gitleaks/gitleaks-action@v2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build Versioned Docker Image
+        run: docker build -t remittance-api:${{ github.event.inputs.image_tag }} .
+
+      - name: Verify Release Artifact
+        run: docker images
