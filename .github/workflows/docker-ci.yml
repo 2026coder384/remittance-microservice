@@ -22,7 +22,7 @@ jobs:
           echo "Building Release Version: ${{ github.event.inputs.image_tag }}"
 
       - name: Checkout code from GitHub
-        uses: actions/checkout@v5
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
@@ -33,12 +33,6 @@ jobs:
       - name: Build Versioned Docker Image
         run: docker build -t remittance-api:${{ github.event.inputs.image_tag }} .
 
-           - name: DevSecOps Gate 2 - Scan Docker Image for Vulnerabilities (Trivy)
+      - name: DevSecOps Gate 2 - Scan Docker Image for Vulnerabilities (Trivy)
         run: |
           docker run --rm -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy:latest image --severity CRITICAL,HIGH --ignore-unfixed remittance-api:${{ github.event.inputs.image_tag }}
-        with:
-          image-ref: 'remittance-api:${{ github.event.inputs.image_tag }}'
-          format: 'table'
-          exit-code: '0'
-          ignore-unfixed: true
-          severity: 'CRITICAL,HIGH'
