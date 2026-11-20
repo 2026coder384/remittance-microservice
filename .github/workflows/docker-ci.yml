@@ -18,8 +18,8 @@ jobs:
     steps:
       - name: Log Change Management Audit Details
         run: |
-          echo "✅ Approved Change Request: ${{ github.event.inputs.change_request_id }}"
-          echo "🚀 Building Release Version: ${{ github.event.inputs.image_tag }}"
+          echo "Approved Change Request: ${{ github.event.inputs.change_request_id }}"
+          echo "Building Release Version: ${{ github.event.inputs.image_tag }}"
 
       - name: Checkout code from GitHub
         uses: actions/checkout@v4
@@ -27,9 +27,8 @@ jobs:
           fetch-depth: 0
 
       - name: DevSecOps Gate 1 - Scan Code for Hardcoded Secrets
-        uses: gitleaks/gitleaks-action@v2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          docker run --rm -v "$PWD:/repo" zricethezav/gitleaks:latest detect --source="/repo" --verbose
 
       - name: Build Versioned Docker Image
         run: docker build -t remittance-api:${{ github.event.inputs.image_tag }} .
