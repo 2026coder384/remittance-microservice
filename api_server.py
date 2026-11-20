@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
 import sqlite3
+import os
 app = FastAPI () 
 conn = sqlite3.connect("remittance.db", check_same_thread=False)
 cursor = conn.cursor()
@@ -29,7 +30,8 @@ def convert_usd (usd: int):
 #building a real, secure POST /transfer endpoint i
 @app.post("/transfer")
 def process_transfer(request: TransferRequest):
-    if request.pin != 1234:
+    expected_pin = int(os.getenv("TRANSFER_PIN", "1234"))
+    if request.pin != expected_pin:
         return {"status": "FAILED", "reason": "Invalid PIN"}
     if request.usd_amount > 5000:
         return {"status": "HOLD_FOR_AML_REVIEW", "reason": "Amount exceeds $5,000 automated limit"}
