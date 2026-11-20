@@ -34,12 +34,12 @@ def process_transfer(request: TransferRequest):
     if request.pin != expected_pin:
         return {"status": "FAILED", "reason": "Invalid PIN"}
     if request.usd_amount > 5000:
-        return {"status": "HOLD_FOR_AML_REVIEW", "reason": "Amount exceeds $5,000 automated limit"}
-        fee = 100  
-        net_inr = request.usd_amount * 84 - fee
-        cursor.execute("INSERT INTO transfers VALUES (?, ?, ?)", (request.sender, request.usd_amount, net_inr))
-        conn.commit()
-        return {"status": "SUCCESS", "sender": request.sender, "inr_payout": net_inr}
+     return {"status": "HOLD_FOR_AML_REVIEW", "reason": "Amount exceeds $5,000 automated limit"}
+    fee = 100  
+    net_inr = request.usd_amount * 84 - fee
+    cursor.execute("INSERT INTO transfers VALUES (?, ?, ?)", (request.sender, request.usd_amount, net_inr))
+    conn.commit()
+    return {"status": "SUCCESS", "sender": request.sender, "inr_payout": net_inr}
 @app.get("/history")
 def get_history():
         cursor.execute("SELECT * FROM transfers")
