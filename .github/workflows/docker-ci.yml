@@ -4,13 +4,13 @@ on:
   workflow_dispatch:
     inputs:
       change_request_id:
-        description: 'ServiceNow Change Request ID (e.g., CHG004601)'
+        description: 'ServiceNow Change Request ID (e.g., CHG004602)'
         required: true
-        default: 'CHG004601'
+        default: 'CHG004602'
       image_tag:
-        description: 'Docker Image Version Tag (e.g., v1.2-sec)'
+        description: 'Docker Image Version Tag (e.g., v1.3-trivy)'
         required: true
-        default: 'v1.2-sec'
+        default: 'v1.3-trivy'
 
 jobs:
   build-and-govern-release:
@@ -22,16 +22,22 @@ jobs:
           echo "Building Release Version: ${{ github.event.inputs.image_tag }}"
 
       - name: Checkout code from GitHub
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           fetch-depth: 0
 
-      - name: DevSecOps Gate 1 - Scan Code for Hardcoded Secrets
+      - name: DevSecOps Gate 1 - Scan Code for Hardcoded Secrets (Gitleaks)
         run: |
           docker run --rm -v "$PWD:/repo" zricethezav/gitleaks:latest detect --source="/repo" --verbose
 
       - name: Build Versioned Docker Image
         run: docker build -t remittance-api:${{ github.event.inputs.image_tag }} .
 
-      - name: Verify Release Artifact
-        run: docker images
+      - name: DevSecOps Gate 2 - Scan Docker Image for Vulnerabilities (Trivy)
+        uses: aquasecurity/trivy-action@0.28.0
+        with:
+          image-ref: 'remittance-api:${{ github.event.inputs.image_tag }}'
+          format: 'table'
+          exit-code: '0'
+          ignore-unfixed: true
+          severity: 'CRITICAL,HIGH'
