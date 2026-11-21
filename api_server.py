@@ -64,7 +64,7 @@ def health_check():
         raise HTTPException(status_code=503, detail=f"UNHEALTHY: {str(e)}")
 @app.post("/admin/backup")
 def backup_database(x_api_key: str = Header(...)):
-    expected_api_key = os.getenv("API_KEY", "wu-secret-key-2026")
+    expected_api_key = os.getenv("API_KEY", "local-dev-only")
     if x_api_key != expected_api_key:
         raise HTTPException(status_code=401, detail="Unauthorized: Invalid X-API-Key")
     shutil.copyfile("remittance.db", "remittance_backup.db")
