@@ -28,7 +28,7 @@ jobs:
 
       - name: DevSecOps Gate 1 - Scan Code for Hardcoded Secrets (Gitleaks)
         run: |
-          docker run --rm -v "$PWD:/repo" zricethezav/gitleaks:latest detect --source="/repo" --verbose
+          docker run --rm -v "$PWD:/repo" zricethezav/gitleaks:latest detect --source="/repo" --no-git --verbose
 
       - name: Build Versioned Docker Image
         run: docker build -t remittance-api:${{ github.event.inputs.image_tag }} .

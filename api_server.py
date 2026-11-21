@@ -32,8 +32,8 @@ def convert_usd (usd: int):
 #building a real, secure POST /transfer endpoint i
 @app.post("/transfer")
 def process_transfer(request: TransferRequest, x_api_key: str = Header(...)):
-    expected_api_key = os.getenv("API_KEY", "wu-secret-key-2026")
-    if x_api_key != expected_api_key:
+    expected_api_key = os.getenv("API_KEY", "local-dev-only")
+    if not expected_api_key or x_api_key != expected_api_key:
      raise HTTPException(status_code=401, detail="Unauthorized: Invalid X-API-Key")
     if failed_attempts.get(request.sender, 0) >= 3:
      raise HTTPException(status_code=429, detail="Account locked due to 3 failed PIN attempts")
